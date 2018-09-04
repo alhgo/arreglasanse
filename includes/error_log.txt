@@ -1,0 +1,3 @@
+
+1.8.2018 10:00:34: Se ha producido un error al enviar el correo al usuario temporal (ID: 30). Código de error: Could not instantiate mail function.
+1.8.2018 10:01:48: Se ha producido un error al enviar el correo al usuario temporal (ID: 1). Código de error: Could not instantiate mail function.
