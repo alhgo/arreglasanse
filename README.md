@@ -25,4 +25,9 @@ En la WIKI de Git-Hub intentaré ir poniendo todo lo referente a librerías, cla
 - Alerta para cookies: https://github.com/Wruczek/Bootstrap-Cookie-Alert
 
 
+## Requsitos
+- Servidor PHP versión 7 o superior con extensión mbstring instalada.
+- Servidor MYSQL
+- Firebase
+- Clave de desarrollador de Google para usar las APIS de Google Maps
 
