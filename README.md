@@ -23,6 +23,7 @@ En la WIKI de Git-Hub intentaré ir poniendo todo lo referente a librerías, cla
 - Librería PHPMailer para el envío de correos (de momento usando las funciones básicas,sin utilizar la funcionalidad de servidores SMTP): https://github.com/PHPMailer/PHPMailer
 - Como añadido, para enviar correos con formato HTML se ha usado el ejemplo aportado por https://github.com/leemunroe/responsive-html-email-template
 - Alerta para cookies: https://github.com/Wruczek/Bootstrap-Cookie-Alert
+- Jquery Overlay: https://gasparesganga.com/labs/jquery-loading-overlay/
 
 
 ## Requsitos
