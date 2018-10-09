@@ -45,6 +45,10 @@ else
 						<select id="marks_ant">
 							<option value="5" <?= ($marks_config['ant'] == '5') ? 'selected' : '' ?>>Mostrar todas</option>
 							<option value="4" <?= ($marks_config['ant'] == '4') ? 'selected' : '' ?>>Último año</option>
+							<option value="3" <?= ($marks_config['ant'] == '3') ? 'selected' : '' ?>>Últimos 6 meses</option>
+							<option value="2" <?= ($marks_config['ant'] == '2') ? 'selected' : '' ?>>Últimos 3 meses</option>
+							<option value="1" <?= ($marks_config['ant'] == '1') ? 'selected' : '' ?>>Último mes</option>
+							<option value="0" <?= ($marks_config['ant'] == '0') ? 'selected' : '' ?>>Última semana</option>
 						</select>
 					</span>   
                       

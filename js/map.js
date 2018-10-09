@@ -55,16 +55,19 @@ function hideShowMark(id, visible=false){
 //Función que oculta las marcas según su antiguedad
 function hideAntMark(ant){
 	$.each( marksAnt["ant" + ant], function( key, val ) {
-		console.log(val);
+		//console.log(val);
 		marker[val].setVisible(false);
+		//Ocultamos la marca lateral
+		$('#side_mark_' + val).fadeOut();
 	});
 }
 
 //Función que muestra las marcas según antiguedad
 function showAntMark(ant){
 	$.each( marksAnt["ant" + ant], function( key, val ) {
-		console.log(val);
+		//console.log(val);
 		marker[val].setVisible(true);
+		$('#side_mark_' + val).fadeIn();
 	});
 }
 
@@ -155,7 +158,7 @@ function initMap() {
 		}
 		
 		//SIDE COL Prepend
-		var side_div = '<li class="menu-collapsed" onclick="launchInfoWindow(' + key + ');">' +
+		var side_div = '<li class="menu-collapsed" onclick="launchInfoWindow(' + key + ');"  id="side_mark_' + key + '">' +
 			'<img src="images/marks/thumbs/' + val.image + '" />' + 
       		'<h3>' + val.tit + '</h3>' + 
       		'<p>' + val.descr + '</p>' + 
@@ -168,7 +171,6 @@ function initMap() {
 		
 	  }); //Fin markers
 	
-	console.log('marcas: ' + marksAnt['ant0'].length);
 	console.log('resueltas: ' + marksRes.length);
 	console.log('categorias: ' + marksCat['cat7'].length);
 		
@@ -233,13 +235,14 @@ function updateSideBar(callback){
 	  $.each( data.marks, function( key, val ) {
 		console.log(data.marks[key]['tit']);
 		  //SIDE COL Prepend
-		var side_div = '<li class="menu-collapsed" onclick="launchInfoWindow(' + key + ');">' +
+		var side_div = '<li class="menu-collapsed" onclick="launchInfoWindow(' + key + ');" id="side_mark_' + key + '">' +
 			'<img src="images/marks/thumbs/' + data.marks[key]['image'] + '" />' + 
       		'<h3>' + data.marks[key]['tit'] + '</h3>' + 
       		'<p>' + data.marks[key]['descr'] + '</p>' + 
 			'</li>';
 		$("#side_bar").prepend(side_div);
 	  });
+	//Retornamos una función que se ejecutará una vez haya terminado esta
 	callback();
 	});
 	
@@ -247,8 +250,25 @@ function updateSideBar(callback){
 }
 
 $('#marks_ant').change(function(){
-	console.log('cambiando antiguedad');
+	
 	var ant = $( this ).val();
+	console.log('cambiando antiguedad:' + ant);
+	//Mostramos las marcas que haya en el mapa superior a esa antiguedad
+	for(var a = ant; a>=0; a--)
+	{
+		showAntMark(a);
+	}
+	//Ocultamos las marcas que haya en el mapa superior a esa antiguedad
+	ant++;
+	for(var a = ant; a<=5; a++)
+	{
+		hideAntMark(a);
+	}
+	
+	//console.log('marcas: ' + marksAnt['ant0'].length);
+	
+	
+	//Si está logeado, cambiamos la configuración del usuario
 	if(firebase){
 		var user = firebase.auth().currentUser;
 		if (user != null && ant != '') {
