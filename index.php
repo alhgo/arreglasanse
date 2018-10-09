@@ -5,11 +5,13 @@ require_once('includes/toolkit.php');
 //Obtenemos los datos del usuario
 $user = new users;
 
+
 ?>
 
-<?php snippet('header.php',['title'=>$site->title]); ?>
+<?php snippet('header.php',['user' => $user, 'title'=>$site->title]); ?>
 
 <body>
+	
 
 <?php snippet('nav.php',['active' => 'home']); ?>
 
@@ -17,7 +19,7 @@ $user = new users;
 		
 		<?php //snippet('breadcrumb.php',array('data' => ['Inicio' => 'index.php'])); ?>
 		
-		<?php snippet('map.php'); ?>
+		<?php snippet('map.php',['user' => $user]); ?>
 
 		<?php if(!$user->logged) snippet('login_form_modal.php'); ?>
 

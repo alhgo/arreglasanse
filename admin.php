@@ -9,7 +9,7 @@ $user = new users;
 if(!$user->is_admin) url::go('index.php');
 ?>
 
-<?php //snippet('header.php',['title'=>$site->title]); ?>
+<?php snippet('header.php',['user' => $user, 'title'=>$site->title]); ?>
 
 <body>
 ADMIN

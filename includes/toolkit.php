@@ -17,6 +17,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+
 //Cargamos TODAS las librerías PHP de la carpeta libs
 //Si queremos que una librería se ignore, basta con ponerle un guion bajo al comienzo del nombre
 function getDirContents($dir, &$results = array()){
@@ -40,15 +41,16 @@ function getDirContents($dir, &$results = array()){
 $libs = getDirContents('libs');
 foreach($libs AS $key=>$value)
 {
-	if(substr($value,-3) == 'php')
+	if(substr($value,-3) == 'php' && substr($value, 6, 1) != '_')
 	{
 		//require_once($value);	
 		$root = dirname(__FILE__).'/' . $value;
 		require_once($root);	
-		//echo dirname(__FILE__).'/' . $value . "<br>";
+		//echo  $value . "<br>";
 	}
 	
 }
+
 
 
 /*CONFIG*/

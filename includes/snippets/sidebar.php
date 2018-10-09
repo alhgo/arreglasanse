@@ -1,20 +1,15 @@
 <?php
-//Obtenemos las marcas
-$map = new map;
-$user = new Users;
 
 if($user->logged){ 
    $marks_config = $user->user_data['marks_config'];
+
 }
 else
 {
 	$marks_config = c::get('marks.config');
 }
 
-//Obtenemos las marcas
-$marks = $map->getMarks($marks_config);
 
-//print_r($marks);
 ?>
 
 	<!-- Sidebar -->
@@ -31,17 +26,46 @@ $marks = $map->getMarks($marks_config);
 			<a href="#" class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
                     <span class="fa fa-tasks fa-fw mr-3"></span>
-                    <span class="menu-collapsed"><select><option value="">Orden</option></select></span>   
+                    <span class="menu-collapsed">
+						<select id="marks_order">
+							<option value="time_updated" <?= ($marks_config['order'] == 'time_updated' && $marks_config['order_type'] == 'DESC') ? 'selected' : '' ?>>Más reciente</option>
+							<option value="time_updated_ASC" <?= ($marks_config['order'] == 'time_updated' && $marks_config['order_type'] == 'ASC') ? 'selected' : '' ?>>Más antigua</option>
+							<option value="solved" <?= ($marks_config['order'] == 'solved') ? 'selected' : '' ?>>Resueltas</option>
+							<option value="agree" <?= ($marks_config['order'] == 'agree') ? 'selected' : '' ?>>Likes</option>
+							<option value="comments" <?= ($marks_config['order'] == 'comments') ? 'selected' : '' ?>>Más comentadas</option>
+						</select>
+					</span>   
+                      
+                </div>
+            </a>
+			<a href="#" class="bg-dark list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-calendar fa-fw mr-3"></span>
+                    <span class="menu-collapsed">
+						<select id="marks_ant">
+							<option value="5" <?= ($marks_config['ant'] == '5') ? 'selected' : '' ?>>Mostrar todas</option>
+							<option value="4" <?= ($marks_config['ant'] == '4') ? 'selected' : '' ?>>Último año</option>
+						</select>
+					</span>   
+                      
+                </div>
+            </a>
+			<a href="#" class="bg-dark list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-search fa-fw mr-3"></span>
+                    <span class="menu-collapsed">
+						<input type="text" id="marks_search" />
+					</span>   
                       
                 </div>
             </a>
 			<p ></p>
   
         </ul><!-- List Group END-->
-		<?php foreach($marks AS $key => $val) : ?>
-		<div>
-			<span class="menu-collapsed" onClick="hideShowMark(<?= $key ?>,false)">Ocultar</span>   
-            <span class="menu-collapsed" onClick="hideShowMark(<?= $key ?>,true)">Mostrar</span>  
-		</div>
-		<?php endforeach ?>
+		
+		<!--SIDE BAR MARKS -->
+		<ul id="side_bar">
+			
+		</ul>
+		
     </div><!-- sidebar-container END -->

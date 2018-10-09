@@ -36,7 +36,7 @@ class Map
 		return $result;
 	}
 	
-	public function getMarks($marks_config)
+	public function getMarks($marks_config,$search='')
 	{
 		/* ---- Opciones de configuración de las marcas -------
 		- Order
@@ -100,7 +100,15 @@ class Map
 				
 				//Decidimos si está oculta o no, en base a la configuración de las marcas
 				$hidden = false;
-				if(in_array($mark['id_cat'],$marks_config['hide'])) //Está entre las categorías ocultas
+				if(isset($marks_config['hide']) && is_array($marks_config['hide']))
+				{
+					$array_hidden = $marks_config['hide'];
+				}
+				else
+				{
+					$array_hidden = array();
+				}
+				if(in_array($mark['id_cat'],$array_hidden)) //Está entre las categorías ocultas
 				{
 					$hidden = true;
 				}
@@ -113,6 +121,18 @@ class Map
 					$hidden = true;
 				}
 				
+				//Si no tiene imagen asignada, la ponemos genérica
+				if($mark['image'] != null && $mark['image'] != '')
+				{
+					//Comprobamos que la imagen existe y tiene un thumbnail
+					
+					$image = $mark['image'];
+				}
+				else
+				{
+					$image = 'default.jpg';
+				}
+				
 				$result[] = [
 					'id_mark' => $mark['id_mark'], 
 					'id_cat' => $mark['id_cat'], 
@@ -120,10 +140,14 @@ class Map
 					'lng' => $mark['lng'], 
 					'tit' => $mark['tit'], 
 					'descr' => $mark['descr'], 
+					'image' => $image, 
 					'icon' => $icon,
 					'updated' => $mark['time_updated'],
 					'time_solved' => $mark['time_solved'],
 					'ant' => $ant,
+					'agree' => $ant,
+					'ant' => $mark['agree'],
+					'comments' => $mark['comments'],
 					'hidden' => $hidden
 				];
 			}

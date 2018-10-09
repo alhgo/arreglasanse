@@ -1,15 +1,18 @@
 
 <?php
 //Iniciamos Firebase
+
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 
 $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/includes/' . c::get('fb.jsonFile'));
 
+
 if(isset($_GET['id']) && isset($_GET['token']))
 {
 	try {
 		$id_user = $user->userConfirmTemp($_GET['id'],$_GET['token']);
+		$user_data = $user->getUserData($id_user);
 		//Insertamos el usuario en FIREBASE
 		$firebase = (new Factory)
 			->withServiceAccount($serviceAccount)
@@ -21,12 +24,16 @@ if(isset($_GET['id']) && isset($_GET['token']))
 			->getReference('users')
 			->push([
 				'id' => $id_user,
-				'confirmed' => time()
+				'confirmed' => time(),
+				'username' => $user_data['username'],
+				'marks_config' => c::get('marks.config'),
+				
 			]);
 		//Obtenemos la clave FB
 		$fb_key = $newPost->getKey();
 		//Lo insertamos en la base de datos
 		$user->userInsertFBtoken($id_user,$fb_key);
+	
 		
 		//Enviamos el aviso
 		$result_title = 'USUARIO REGISTRADO';

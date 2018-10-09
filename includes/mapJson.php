@@ -21,12 +21,20 @@ $data['cats'] = $map->getCats();
 $marks_config = array();
 
 if($user->logged){ 
-   $marks_config = $user->user_data['marks_config'];
+
+	$marks_config = $user->user_data['marks_config'];
+	
 }
 else
 {
 	$marks_config = c::get('marks.config');
 }
+
+//Si se ha especificado el orden
+if(isset($_GET['order']) && $_GET['order'] != '') $marks_config['order'] = $_GET['order'];
+//Si se ha especificado el tippo de orden
+if(isset($_GET['order_type']) && $_GET['order_type'] != '') $marks_config['order_type'] = $_GET['order_type'];
+
 
 $data['marks_config'] = $marks_config;
 
