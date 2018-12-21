@@ -65,7 +65,12 @@ class Map
 		4: 1 año
 		5: más antigua
 		*/
-		$a = [time() - 604800, time() - 2419200, time() - 7257600, time() - 14515200, time() - 29030400];
+		$a = [
+            0 => time() - 604800, 
+            1 => time() - 2592000, 
+            2 => time() - 7776000, 
+            3 => time() - 15552000, 
+            4 => time() - 31536000];
 		
 		//Creamos el array con las marcas
 		$result = array();
@@ -82,16 +87,16 @@ class Map
 					case $mark['time_updated'] < $a[4]:
 						$ant = 5;
 						break;
-					case $mark['time_updated'] < $a[3]:
+                    case $mark['time_updated'] < $a[3]:
 						$ant = 4;
 						break;
-					case $mark['time_updated'] < $a[2]:
+                    case $mark['time_updated'] < $a[2]:
 						$ant = 3;
 						break;
-					case $mark['time_updated'] < $a[1]:
+                    case $mark['time_updated'] < $a[1]:
 						$ant = 2;
 						break;
-					case $mark['time_updated'] < $a[0]:
+                    case $mark['time_updated'] < $a[0]:
 						$ant = 1;
 						break;
 					default:
@@ -134,6 +139,7 @@ class Map
 				}
 				
 				$result[] = [
+					'a0' =>  $a[1], 
 					'id_mark' => $mark['id_mark'], 
 					'id_cat' => $mark['id_cat'], 
 					'lat' => $mark['lat'], 
@@ -143,10 +149,10 @@ class Map
 					'image' => $image, 
 					'icon' => $icon,
 					'updated' => $mark['time_updated'],
+					'updated_long' => date('Y-m-d',$mark['time_updated']),
 					'time_solved' => $mark['time_solved'],
 					'ant' => $ant,
-					'agree' => $ant,
-					'ant' => $mark['agree'],
+					'agree' => $mark['agree'],
 					'comments' => $mark['comments'],
 					'hidden' => $hidden
 				];

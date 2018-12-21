@@ -5,7 +5,6 @@ require_once('includes/toolkit.php');
 //Obtenemos los datos del usuario
 $user = new users;
 
-
 ?>
 
 <?php snippet('header.php',['user' => $user, 'title'=>$site->title]); ?>

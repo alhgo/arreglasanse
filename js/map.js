@@ -47,7 +47,7 @@ function addScript( url, callback ) {
 	}
 
 //Función que oculta las marcas
-function hideShowMark(id, visible=false){
+function hideShowMark(id, visible = false){
 	marker[id].setVisible(visible);
 }
 
@@ -161,6 +161,7 @@ function initMap() {
 		var side_div = '<li class="menu-collapsed" onclick="launchInfoWindow(' + key + ');"  id="side_mark_' + key + '">' +
 			'<img src="images/marks/thumbs/' + val.image + '" />' + 
       		'<h3>' + val.tit + '</h3>' + 
+      		'<h3>' + val.updated_long + '</h3>' + 
       		'<p>' + val.descr + '</p>' + 
 			'</li>';
 		$("#side_bar").prepend(side_div);
@@ -193,10 +194,20 @@ function initMap() {
 
 
 */
-
+var order;
+var order_type = 'desc';
 $('#marks_order').change(function(){
 	console.log('cambiando orden');
-	var order = $( this ).val();
+	order = $( this ).val();
+    //console.log(order);
+    //Si se ordena por fecha pero descendente
+    if(order == 'time_updated_ASC'){
+        order = 'time_updated';
+        order_type = 'asc';
+    }
+    else{
+        order_type = 'desc';
+    }
 	if(firebase){
 		var user = firebase.auth().currentUser;
 		if (user != null && order != '') {
@@ -229,15 +240,18 @@ $('#marks_order').change(function(){
 
 function updateSideBar(callback){
 	//Leemos el archivo con las marcas de nuevo y las añadimos
-	$.getJSON( "includes/mapJson.php", function( data ) {
+    console.log(order);
+    console.log(order_type);
+	$.getJSON( "includes/mapJson.php?order=" + order + '&order_type=' + order_type, function( data ) {
 		//Eliminamos el contenido
 		$('#side_bar').html('');;
 	  $.each( data.marks, function( key, val ) {
-		console.log(data.marks[key]['tit']);
+		//console.log(data.marks[key]['tit']);
 		  //SIDE COL Prepend
 		var side_div = '<li class="menu-collapsed" onclick="launchInfoWindow(' + key + ');" id="side_mark_' + key + '">' +
 			'<img src="images/marks/thumbs/' + data.marks[key]['image'] + '" />' + 
       		'<h3>' + data.marks[key]['tit'] + '</h3>' + 
+      		'<h3>' + data.marks[key]['updated_long'] + '</h3>' + 
       		'<p>' + data.marks[key]['descr'] + '</p>' + 
 			'</li>';
 		$("#side_bar").prepend(side_div);
