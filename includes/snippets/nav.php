@@ -2,6 +2,16 @@
 $user = new users;
 $site = new Site;
 
+if($user->logged){ 
+   $marks_config = $user->user_data['marks_config'];
+
+}
+else
+{
+	$marks_config = c::get('marks.config');
+}
+
+
 ?>
    	<!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -43,6 +53,21 @@ $site = new Site;
               <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Login</a>
             </li>
             <?php endif ?>
+            <!--sidebar menu, show in small devices-->
+            <div class="d-md-block d-lg-none">
+                <li class="nav-item"><hr></li>
+                <li class="nav-item">
+                    Ordenar: 
+                    <select id="marks_order_top">
+                        <option value="time_updated" <?= ($marks_config['order'] == 'time_updated' && $marks_config['order_type'] == 'DESC') ? 'selected' : '' ?>>Más reciente</option>
+                        <option value="time_updated_ASC" <?= ($marks_config['order'] == 'time_updated' && $marks_config['order_type'] == 'ASC') ? 'selected' : '' ?>>Más antigua</option>
+                        <option value="solved" <?= ($marks_config['order'] == 'solved') ? 'selected' : '' ?>>Resueltas</option>
+                        <option value="agree" <?= ($marks_config['order'] == 'agree') ? 'selected' : '' ?>>Likes</option>
+                        <option value="comments" <?= ($marks_config['order'] == 'comments') ? 'selected' : '' ?>>Más comentadas</option>
+                    </select>
+                </li>
+            </div>  
+              <!-- Smaller devices menu END -->  
           </ul>
         </div>
       </div>

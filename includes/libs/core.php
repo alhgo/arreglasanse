@@ -11,6 +11,13 @@
 
 //Clase que establece las variables y constantes del sitio
 //Inspirado en http://getkirby.com
+//Firebase
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\ServiceAccount;
+
+
+//$serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/' . c::get('fb.jsonFile'));
+
 class C {
 
   public static $data = array();
@@ -179,6 +186,7 @@ class Users
 			$this->user_data = $this->getUserData($this->id);
 			$this->is_admin = ($this->user_data['admin'] == 1) ? true : false;
 			
+			
 		} 
 	}
 	
@@ -193,6 +201,21 @@ class Users
 		$db->where ("id_user", $id);
 		$user = $db->getOne ("users");
 		
+		//Añadimos la configuración de marcas de firebase
+		$serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/../' . c::get('fb.jsonFile'));
+		$firebase = (new Factory)
+			->withServiceAccount($serviceAccount)
+			->withDatabaseUri(c::get('fb.url'))
+			->create();
+
+		$uid = $user['fb_token'];
+
+		//Obtenemos los datos de configuración para visualizar las marcas
+		$database = $firebase->getDatabase();
+		$reference = $database->getReference('users/' . $uid . '/marks_config');
+		$value = $reference->getValue();
+		$user['marks_config'] = $value;
+		
 		//Obtenemos las categorías activadas para recibir avisos
 		$db->where("id_user",$id);
 		$cats = $db->get("users_cats_notice");
@@ -201,7 +224,9 @@ class Users
 		{
 			$user['cats_notice'][] = $val['id_cat'];
 		}
-	
+		
+		//print_r($user);
+		
 		return $user;
 	}
 	
@@ -373,7 +398,9 @@ class Users
 		}
 		else
 		{
+			
 			//Datos a insertar
+			$time_confirmed = time();
 			$data = array(
 				'username' => $results['username'],
 				'name' => $results['name'],
@@ -381,10 +408,12 @@ class Users
 				'password' => $results['password'],
 				'birth' => $results['birth'],
 				'admin' => 0,
-				'time_confirmed' => time()
+				'time_confirmed' => $time_confirmed
 			);
+			
 			//Insertamos los datos
 			$id_user = $db->insert ('users', $data);
+			
 			if(!$id_user)
 			{
 				
@@ -392,6 +421,7 @@ class Users
 			}
 			else 
 			{
+				
 				//Borramos el usuario temporal
 				$db->where('id', $id);
 				$db->delete('users_temp');
@@ -529,6 +559,11 @@ class Users
 		$db->where ('id_user', $id_user);
 		$db->update ('users', $data);
 		
+	}
+	
+	public function generateFbToken()
+	{
+		$serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/' . c::get('fb.jsonFile'));
 	}
 	
 	

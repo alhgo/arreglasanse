@@ -1,11 +1,11 @@
 <?php
 
-//Conectamos con la base de datos
+
 
 ?>
 <!-- Bootstrap row -->
 <div class="row" id="body-row">
-    <?php snippet('sidebar.php') ?>
+    <?php snippet('sidebar.php',['user' => $user]) ?>
     <!-- MAIN -->
     <div class="col p-0">
         

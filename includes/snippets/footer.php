@@ -55,6 +55,7 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/cookiealert-standalone.js"></script>
+    <script src="js/loadingoverlay.js"></script>
 	<script src="js/popper.min.js"></script>
 	<!--Specific js files-->
 	<?php
