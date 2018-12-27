@@ -5,12 +5,12 @@ var mapData;
 var marker = [];
 //Arrays de antiguedad
 var marksAnt = [];
-marksAnt["ant0"] = [];
-marksAnt["ant1"] = [];
-marksAnt["ant2"] = [];
-marksAnt["ant3"] = [];
-marksAnt["ant4"] = [];
-marksAnt["ant5"] = [];
+marksAnt.ant0 = [];
+marksAnt.ant1 = [];
+marksAnt.ant2 = [];
+marksAnt.ant3 = [];
+marksAnt.ant4 = [];
+marksAnt.ant5 = [];
 
 //Array de resueltas
 var marksRes = [];
@@ -21,7 +21,6 @@ var marksCat = [];
 //Cargamos los datos
 window.onload = function() {
 	
-	
 	$.getJSON( "includes/mapJson.php", function( data ) {
 	  /*
 	  $.each( data, function( key, val ) {
@@ -30,12 +29,18 @@ window.onload = function() {
 		*/
 		mapData = data;
 		
+		//Añadimos los tags para el formulario de búsqueda
+		var availableTags = data.tags;
+		$( "#tags" ).autocomplete({
+		  source: availableTags
+		});
+		
 		// Initialize and add the map
 		loadMapsAPI(data.config.apiKey);
 		
 		
 	});
-}
+};
 
 //Función que permite insertar el script de Google Maps cuando se han leído todas las marcas
 function addScript( url, callback ) {
@@ -79,7 +84,7 @@ function showAntMark(ant){
 	
 function initMap() {
 	
-	//Cargamos la animación de "cargandop"
+	//Cargamos la animación de "loading"
 	$("#body-row").LoadingOverlay("show", {
 		background  : "rgba(165, 190, 100, 0.75)"
 	});
@@ -158,22 +163,17 @@ function initMap() {
 		}
 		
 		//SIDE COL Prepend
-		var side_div = '<li class="menu-collapsed" onclick="launchInfoWindow(' + key + ');"  id="side_mark_' + key + '">' +
-			'<img src="images/marks/thumbs/' + val.image + '" />' + 
-      		'<h3>' + val.tit + '</h3>' + 
-      		'<h3>' + val.updated_long + '</h3>' + 
-      		'<p>' + val.descr + '</p>' + 
-			'</li>';
+		var side_div = sideMarkConstructor(key,val,true);
 		$("#side_bar").prepend(side_div);
-		
+					
 		
 		//Quitamos la imagen de "cargando"
 		$("#body-row").LoadingOverlay("hide",true);
 		
 	  }); //Fin markers
 	
-	console.log('resueltas: ' + marksRes.length);
-	console.log('categorias: ' + marksCat['cat7'].length);
+	//console.log('resueltas: ' + marksRes.length);
+	//console.log('categorias: ' + marksCat['cat7'].length);
 		
 	}
 	
@@ -195,35 +195,32 @@ function initMap() {
 
 */
 var order;
-var order_type = 'desc';
-$('#marks_order').change(function(){
+var order_type = 'asc';
+$('#marks_order, #marks_order_top').change(function(){
 	console.log('cambiando orden');
 	order = $( this ).val();
     //console.log(order);
     //Si se ordena por fecha pero descendente
-    if(order == 'time_updated_ASC'){
+    if(order == 'time_updated_DESC'){
         order = 'time_updated';
-        order_type = 'asc';
-    }
-    else{
         order_type = 'desc';
     }
+	else if(order == 'agree' || order == 'comment')
+	{
+		order_type = 'asc';
+	}
+
+	//Si estamos conectados a Firebase, actualizamos los datos
 	if(firebase){
 		var user = firebase.auth().currentUser;
-		if (user != null && order != '') {
+		if (user !== null && order !== '') {
 			uid = user.uid;  
 			//Cambiamos la configuración del usuario
-			if(order != 'time_updated_ASC'){
-					firebase.database().ref('users/' + uid +'/marks_config/order').set(order);
-					firebase.database().ref('users/' + uid +'/marks_config/order_type').set('DESC');
-			}
-			else{
-				firebase.database().ref('users/' + uid +'/marks_config/order').set('time_updated');
-				firebase.database().ref('users/' + uid +'/marks_config/order_type').set('ASC');
-			}
-
+			firebase.database().ref('users/' + uid +'/marks_config/order').set(order);
+			firebase.database().ref('users/' + uid +'/marks_config/order_type').set(order_type);
 		}
 	}
+	
 	//Loading
 	$("#side_bar").LoadingOverlay("show", {
 		background  : "rgba(165, 190, 100, 0.95)"
@@ -248,22 +245,20 @@ function updateSideBar(callback){
 	  $.each( data.marks, function( key, val ) {
 		//console.log(data.marks[key]['tit']);
 		  //SIDE COL Prepend
-		var side_div = '<li class="menu-collapsed" onclick="launchInfoWindow(' + key + ');" id="side_mark_' + key + '">' +
-			'<img src="images/marks/thumbs/' + data.marks[key]['image'] + '" />' + 
-      		'<h3>' + data.marks[key]['tit'] + '</h3>' + 
-      		'<h3>' + data.marks[key]['updated_long'] + '</h3>' + 
-      		'<p>' + data.marks[key]['descr'] + '</p>' + 
-			'</li>';
+		
+		var side_div = sideMarkConstructor(key,data.marks[key]);
+		  
 		$("#side_bar").prepend(side_div);
 	  });
 	//Retornamos una función que se ejecutará una vez haya terminado esta
 	callback();
 	});
 	
-	
 }
 
-$('#marks_ant').change(function(){
+
+//Cambiando las marcas según fecha
+$('#marks_ant, #marks_ant_top').change(function(){
 	
 	var ant = $( this ).val();
 	console.log('cambiando antiguedad:' + ant);
@@ -294,6 +289,72 @@ $('#marks_ant').change(function(){
 	
 	
 });
+
+
+//Búsqueda de marcas
+var search;
+$('#search_icon').click(function(){
+
+	search = $( '#tags' ).val();
+	console.log('buscar' + search.trim());
+	if(search.trim() != '')
+	{
+		
+		//Loading
+		$("#side_bar").LoadingOverlay("show", {
+			background  : "rgba(165, 190, 100, 0.95)"
+		});
+
+		//Ejecutamos la función que actualiza la barra lateral con callback para quitar el loading
+		searchSideBar(function(){
+			console.log('ha terminado');
+			//Quitamos el loading
+			$("#side_bar").LoadingOverlay("hide",true);
+		})
+
+	}
+});
+
+
+function searchSideBar(callback){
+	//Leemos el archivo con las marcas de nuevo y las añadimos
+	$.getJSON( "includes/mapJson.php?search=" + search, function( data ) {
+		//Eliminamos el contenido
+		$('#side_bar').html('');;
+	  $.each( data.marks, function( key, val ) {
+		//console.log(data.marks[key]['tit']);
+		  //SIDE COL Prepend
+		
+		var side_div = sideMarkConstructor(key,data.marks[key]);
+		  
+		$("#side_bar").prepend(side_div);
+	  });
+	//Retornamos una función que se ejecutará una vez haya terminado esta
+	callback();
+	});
+	
+}
+
+
+//Función que construye el la marca en la barra lateral a partir de su ID y un array con los datos
+//Si se marca hide como true, ocultará la marca
+function sideMarkConstructor(key,mark,hide=false) {
+	var hide_style = '';
+	if(hide===true && mark.hidden === true)
+	{
+		hide_style = ' style="display:none"';
+	}
+	var text = '<li class="menu-collapsed" onclick="launchInfoWindow(' + key + ');"  id="side_mark_' + key + '"' + hide_style + '>' +
+			'<img src="images/marks/thumbs/' + mark.image + '" />' + 
+      		'<h3>' + mark.tit + '</h3>' + 
+      		'<p>' + mark.updated_long + '<p>' + 
+      		'<span class="clearfix"/>' + 
+      		'<!--<p>' + mark.descr + '</p>-->' + 
+      		'<p class="mark_data">' + mark.agree + ' likes /' + 
+      		'' + mark.comments + ' comments</p>' + 
+			'</li>';
+	return text;
+}
 
 
 

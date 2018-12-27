@@ -56,16 +56,17 @@ else
             <!--sidebar menu, show in small devices-->
             <div class="d-md-block d-lg-none">
                 <li class="nav-item"><hr></li>
-                <li class="nav-item">
-                    Ordenar: 
-                    <select id="marks_order_top">
-                        <option value="time_updated" <?= ($marks_config['order'] == 'time_updated' && $marks_config['order_type'] == 'DESC') ? 'selected' : '' ?>>Más reciente</option>
-                        <option value="time_updated_ASC" <?= ($marks_config['order'] == 'time_updated' && $marks_config['order_type'] == 'ASC') ? 'selected' : '' ?>>Más antigua</option>
-                        <option value="solved" <?= ($marks_config['order'] == 'solved') ? 'selected' : '' ?>>Resueltas</option>
-                        <option value="agree" <?= ($marks_config['order'] == 'agree') ? 'selected' : '' ?>>Likes</option>
-                        <option value="comments" <?= ($marks_config['order'] == 'comments') ? 'selected' : '' ?>>Más comentadas</option>
-                    </select>
-                </li>
+                
+				<li class="nav-item">
+					<select id="marks_ant_top">
+						<option value="5" <?= ($marks_config['ant'] == '5') ? 'selected' : '' ?>>Mostrar todas</option>
+						<option value="4" <?= ($marks_config['ant'] == '4') ? 'selected' : '' ?>>Último año</option>
+						<option value="3" <?= ($marks_config['ant'] == '3') ? 'selected' : '' ?>>Últimos 6 meses</option>
+						<option value="2" <?= ($marks_config['ant'] == '2') ? 'selected' : '' ?>>Últimos 3 meses</option>
+						<option value="1" <?= ($marks_config['ant'] == '1') ? 'selected' : '' ?>>Último mes</option>
+						<option value="0" <?= ($marks_config['ant'] == '0') ? 'selected' : '' ?>>Última semana</option>
+					</select>
+				</li>
             </div>  
               <!-- Smaller devices menu END -->  
           </ul>

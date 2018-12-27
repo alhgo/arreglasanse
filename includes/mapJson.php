@@ -32,14 +32,19 @@ else
 
 //Si se ha especificado el orden
 if(isset($_GET['order']) && $_GET['order'] != '') $marks_config['order'] = $_GET['order'];
-//Si se ha especificado el tippo de orden
+//Si se ha especificado el tipo de orden
 if(isset($_GET['order_type']) && $_GET['order_type'] != '') $marks_config['order_type'] = $_GET['order_type'];
+//Si se ha especificado una búsqueda
+$search = (isset($_GET['search']) && $_GET['search'] != '') ? $_GET['search'] : '';
 
 
 $data['marks_config'] = $marks_config;
 
 //Obtenemos las marcas
-$data['marks'] = $map->getMarks($marks_config);
+$data['marks'] = $map->getMarks($marks_config,$search);
+
+//Añadimos las palabras clave
+$data['tags'] = $map->tags;
 
 header('Content-Type: application/json');
 echo json_encode($data, JSON_PRETTY_PRINT); //Muestra el archivo JSON formateado bonito

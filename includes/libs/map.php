@@ -4,6 +4,7 @@ class Map
 {
 	
 	private $db;
+	public $tags = array();
 	
 	function __construct()
 	{
@@ -64,18 +65,26 @@ class Map
 		3: 6 meses
 		4: 1 año
 		5: más antigua
+		mine: muestra las marcas del autor, si está logeado
 		*/
 		$a = [
             0 => time() - 604800, 
             1 => time() - 2592000, 
             2 => time() - 7776000, 
             3 => time() - 15552000, 
-            4 => time() - 31536000];
+            4 => time() - 31536000
+		];
 		
 		//Creamos el array con las marcas
 		$result = array();
+		
 		$db = $this->db;
 		$db->orderBy($marks_config['order'],$marks_config['order_type']);
+		//Si se ha especificado una búsqueda
+		if($search != '')
+		{
+			$db->where ("tit", '%' . $search . '%', 'like');
+		}
 		$marks = $db->get ("marks");
 		if ($db->count > 0)
 			foreach ($marks as $mark) 
@@ -138,9 +147,9 @@ class Map
 					$image = 'default.jpg';
 				}
 				
-				$result[] = [
-					'a0' =>  $a[1], 
+				$result[] = [ 
 					'id_mark' => $mark['id_mark'], 
+					'id_usr' => $mark['id_usr'], 
 					'id_cat' => $mark['id_cat'], 
 					'lat' => $mark['lat'], 
 					'lng' => $mark['lng'], 
@@ -151,12 +160,21 @@ class Map
 					'updated' => $mark['time_updated'],
 					'updated_long' => date('Y-m-d',$mark['time_updated']),
 					'time_solved' => $mark['time_solved'],
+					'id_usr_res' => $mark['id_usr_res'],
 					'ant' => $ant,
 					'agree' => $mark['agree'],
 					'comments' => $mark['comments'],
 					'hidden' => $hidden
 				];
+				
+				//Extraemos las palabras clave y las añadimos
+				$tags = extractKeyWords($mark['tit']);
+				$this->tags = array_merge($this->tags,$tags);
 			}
+		
+		//Limpiamos las marcas
+		$this->tags = array_unique($this->tags);
+		
 		return $result;
 	}
 }

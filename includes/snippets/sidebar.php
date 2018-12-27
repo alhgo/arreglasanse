@@ -17,19 +17,19 @@ else
         <!-- Bootstrap List Group -->
         <ul class="list-group">
       
-            <a href="#" data-toggle="sidebar-colapse" class="bg-dark list-group-item list-group-item-action d-flex align-items-center">
+            <a data-toggle="sidebar-colapse" class="bg-dark list-group-item list-group-item-action d-flex align-items-center">
                 <div class="d-flex w-100 justify-content-start align-items-center">
                     <span id="collapse-icon" class="fa fa-2x mr-3"></span>
                     <span id="collapse-text" class="menu-collapsed">Cerrar</span>
                 </div>
             </a>
-			<a href="#" class="bg-dark list-group-item list-group-item-action">
+			<a class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
                     <span class="fa fa-tasks fa-fw mr-3"></span>
                     <span class="menu-collapsed">
 						<select id="marks_order">
-							<option value="time_updated" <?= ($marks_config['order'] == 'time_updated' && $marks_config['order_type'] == 'DESC') ? 'selected' : '' ?>>Más reciente</option>
-							<option value="time_updated_ASC" <?= ($marks_config['order'] == 'time_updated' && $marks_config['order_type'] == 'ASC') ? 'selected' : '' ?>>Más antigua</option>
+							<option value="time_updated" <?= ($marks_config['order'] == 'time_updated' && $marks_config['order_type'] == 'ASC') ? 'selected' : '' ?>>Más reciente</option>
+							<option value="time_updated_DESC" <?= ($marks_config['order'] == 'time_updated' && $marks_config['order_type'] == 'DESC') ? 'selected' : '' ?>>Más antigua</option>
 							<option value="solved" <?= ($marks_config['order'] == 'solved') ? 'selected' : '' ?>>Resueltas</option>
 							<option value="agree" <?= ($marks_config['order'] == 'agree') ? 'selected' : '' ?>>Likes</option>
 							<option value="comments" <?= ($marks_config['order'] == 'comments') ? 'selected' : '' ?>>Más comentadas</option>
@@ -38,7 +38,7 @@ else
                       
                 </div>
             </a>
-			<a href="#" class="bg-dark list-group-item list-group-item-action">
+			<a class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
                     <span class="fa fa-calendar fa-fw mr-3"></span>
                     <span class="menu-collapsed">
@@ -49,24 +49,29 @@ else
 							<option value="2" <?= ($marks_config['ant'] == '2') ? 'selected' : '' ?>>Últimos 3 meses</option>
 							<option value="1" <?= ($marks_config['ant'] == '1') ? 'selected' : '' ?>>Último mes</option>
 							<option value="0" <?= ($marks_config['ant'] == '0') ? 'selected' : '' ?>>Última semana</option>
+							<?php if($user->logged) : ?>
+							<!--Mostrar solo las marcas del usuario-->
+							<option value="mine" <?= ($marks_config['ant'] == 'mine') ? 'selected' : '' ?>>Mis marcas</option>
+							<?php endif ?>
 						</select>
 					</span>   
                       
                 </div>
             </a>
-			<a href="#" class="bg-dark list-group-item list-group-item-action">
+			<a  class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
                     <span class="fa fa-search fa-fw mr-3"></span>
                     <span class="menu-collapsed">
-						<input type="text" id="marks_search" />
+						<div class="ui-widget">
+						  <input id="tags">&nbsp;<i class="fa fa-arrow-circle-o-right fa-lg" aria-hidden="true" id="search_icon"></i>
+						</div>					
 					</span>   
                       
                 </div>
             </a>
-			<p ></p>
-  
+			
         </ul><!-- List Group END-->
-		
+		<h4 class="text-center">Marcas</h4>
 		<!--SIDE BAR MARKS -->
 		<ul id="side_bar">
 			

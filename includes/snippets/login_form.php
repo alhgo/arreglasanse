@@ -1,7 +1,11 @@
+	<!-- Modal Header -->
+	<div class="modal-header">
+		<h4>Formulario de inicio de sesión</h4>
+		<button type="button" class="close" data-dismiss="modal">&times;</button>
+	</div>
 	<!-- Modal body -->
     <div class="modal-body">
-		<h5>Formulario de inicio de sesión</h5>
-		<hr>
+		<p>
 		<form action="" method="post">
 			<div class="form-group has-danger">
 			  <label class="form-label" for="username" id="label_username">Correo o nombre de usuario</label>
@@ -26,6 +30,7 @@
 			</div>
 			<span class="btn btn-primary" id="login-button">Aceptar</span>
 		  </form>
+		</p>
 	</div>
 	
 	<!-- Modal footer -->

@@ -27,8 +27,11 @@
     <link rel="stylesheet" href="css/cookiealert.css">
 	  
 	<!-- Scrollbar Custom CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+	  <!--https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css-->
+    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
 	  
+	<!--Jquery UI -->
+	<link rel="stylesheet" href="css/jquery-ui.css">  
 	  
 
     <!-- Custom styles for this template -->

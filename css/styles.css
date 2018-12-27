@@ -221,34 +221,48 @@ html, body, #map {
 	
 }
 
-#side_bar ul {
-  padding: 0 !important;
+
+#side_bar {
+  padding: 0px !important;
   list-style-type: none;
   width: 100%;
-  
+  background-color: aliceblue;
+  font-family: Helvetica, Verdana, sans-serif;
 }
  
-#side_bar h3 {
-  font: bold 16px/1.5 Helvetica, Verdana, sans-serif;
+#side_bar li h3 {
+  margin: 0px;
+  font-size: 1.1em;	
 }
  
 #side_bar li img {
   float: left;
   margin: 0 10px 0 0;
+	width: 50px;
 	
 }
  
 #side_bar li p {
-  font: 200 12px/1.5 Georgia, Times New Roman, serif;
+  font-size: 0.7em;
+  margin: 0px;	
 }
  
 #side_bar li {
   padding: 10px;
   overflow: auto;
-  
+  border-bottom: 1px black solid;
+}
+
+#side_bar .mark_data {
+	margin-top: 10px;
 }
  
-li:hover {
+#side_bar li:hover {
   background: #eee;
   cursor: pointer;
 }
+
+#search_icon {
+	cursor:  pointer;
+}
+
