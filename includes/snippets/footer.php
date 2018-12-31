@@ -75,8 +75,6 @@
 	<script src="js/' . $lib . '"></script>';
 		}
 	}
-
-	
 	
 	?>
 

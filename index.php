@@ -24,6 +24,7 @@ $user = new users;
 
 	</div>
 <?php snippet('footer.php', ['libs' => array('forms.js','map.js')]); ?>
-
+	
+	
 </body>
 </html>

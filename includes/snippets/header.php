@@ -75,7 +75,9 @@
 	
 	
 	<!--Firebase-->
-	<script src="https://www.gstatic.com/firebasejs/5.4.0/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-database.js"></script>
 	
 	<script>
 	  // Initialize Firebase
@@ -88,26 +90,41 @@
 		messagingSenderId: "<?= c::get('fb.messagingSenderId') ?>"
 	  };
 	  firebase.initializeApp(config);
-	  <?php if($user->logged && isset($user->user_data['custom_token'])) : ?> 	
-	  //Auth 
-	  firebase.auth().signInWithCustomToken('<?= $user->user_data['custom_token'] ?>').catch(function(error) {
-	  // Handle Errors here.
-	  var errorCode = error.code;
-	  var errorMessage = error.message;
-	  // ...
-	});
-		
-	firebase.auth().onAuthStateChanged(function(user) {
-	  if (user) {
-		// User is signed in.
-		console.log('logeado en firebase');
-	  } else {
-		alert('Se ha producido un error al logear el usuario en la base de datos.')
-	  }
-	  // ...
-	});
-	
-	<?php endif ?>
+	  
 	</script>
-	
+	<?php if($user->logged) : ?> 	
+	<script>
+		//FB Auth. Si no está logeado, lo hacemos
+		var user = firebase.auth().currentUser;
+		firebase.auth().onAuthStateChanged(function(user) {
+			if(user == null) {
+			//Configuramos la persistencia para SESSION
+			//https://firebase.google.com/docs/auth/web/auth-state-persistence?hl=es-419
+			firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+		  .then(function() {
+				console.log('Signed In FB');
+				firebase.auth().signInWithCustomToken('<?= $user->user_data['custom_token'] ?>')
+				.catch(function(error) {
+				// Handle Errors here.
+				var errorCode = error.code;
+				var errorMessage = error.message;
+				if(error)
+				  {
+					  alert(errorCode);
+					  window.location.href = '<?= c::get('site.url') ?>/error.php?error=FirebaseUserLogin&add=errorCode:' + errorCode;
+				  }
+					});
+				});
+			}
+			else{
+				//Añadimos el apunte de logeo
+				uid = user.uid; 
+				var now = Math.floor(Date.now() / 1000);
+				firebase.database().ref('users/' + uid + '/lastLogin').set(now);
+				console.log('FB Last Login:' + ' ' + now);
+			}
+		});
+
+	</script>
+<?php endif ?>
   </head>

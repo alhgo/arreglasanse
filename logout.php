@@ -1,11 +1,40 @@
 <?php
 require_once('includes/toolkit.php');
-$cookiename = c::get('cookie.user');
-setcookie($cookiename, null, time() - 3600, "/");
-$url = c::get('site.url');
 
-header("Location: $url"); /* Redirección del navegador */
+//Obtenemos los datos del sitio y del usuario
+$user = new Users;
+$site = new Site;
 
-/* Asegurándonos de que el código interior no será ejecutado cuando se realiza la redirección. */
-exit;
+$user->destroyCookie();
+
 ?>
+
+<?php snippet('header.php',['user' => $user, 'title'=>$site->title]); ?>
+
+
+<?php snippet('footer.php', ['libs' => array()]); ?>
+
+<script>
+//$(document).ready( function() {	
+	firebase.auth().signOut().then(function() {
+  		// Sign-out successful.
+		console.log('Signed Out');
+		//Redirigimos
+		window.location.href = '<?= c::get('site.url') ?>';
+		}).catch(function(error) {
+  		// An error happened.
+	  	console.error('Sign Out Error', error);
+	});
+//});
+
+</script>
+
+	
+<?php	
+
+
+//url::go('user.php');
+
+
+?>
+

@@ -19,7 +19,7 @@ var marksRes = [];
 var marksCat = [];
 
 //Cargamos los datos
-window.onload = function() {
+$(document).ready( function() {
 	
 	$.getJSON( "includes/mapJson.php", function( data ) {
 	  /*
@@ -40,7 +40,7 @@ window.onload = function() {
 		
 		
 	});
-};
+});
 
 //Función que permite insertar el script de Google Maps cuando se han leído todas las marcas
 function addScript( url, callback ) {
@@ -73,6 +73,24 @@ function showAntMark(ant){
 		//console.log(val);
 		marker[val].setVisible(true);
 		$('#side_mark_' + val).fadeIn();
+	});
+}
+
+//Función que muestra solo las marcas del autor
+function showUserMark(id_user){
+	$.each( mapData.marks, function( key, val ) {
+		console.log(val.id_usr);
+		if(val.id_usr != id_user)
+		{
+			marker[key].setVisible(false);
+			$('#side_mark_' + key).fadeOut();
+		}
+		else
+		{
+			marker[key].setVisible(true);
+			$('#side_mark_' + key).fadeIn();
+		}
+		
 	});
 }
 
@@ -261,33 +279,41 @@ function updateSideBar(callback){
 $('#marks_ant, #marks_ant_top').change(function(){
 	
 	var ant = $( this ).val();
+	var a;
 	console.log('cambiando antiguedad:' + ant);
-	//Mostramos las marcas que haya en el mapa superior a esa antiguedad
-	for(var a = ant; a>=0; a--)
+	//Si se ha pedido que se muestren las marcas del usuario logeado
+	if(ant=='mine')
 	{
-		showAntMark(a);
+		console.log('Mostrando las marcas del usuario');
+		showUserMark(1);
 	}
-	//Ocultamos las marcas que haya en el mapa superior a esa antiguedad
-	ant++;
-	for(var a = ant; a<=5; a++)
+	else
 	{
-		hideAntMark(a);
+		//Mostramos las marcas que haya en el mapa superior a esa antiguedad	
+		for(a = ant; a>=0; a--)
+		{
+			showAntMark(a);
+		}
+		//Ocultamos las marcas que haya en el mapa superior a esa antiguedad
+		ant++;
+		for(a = ant; a<=5; a++)
+		{
+			hideAntMark(a);
+		}
+
 	}
-	
-	//console.log('marcas: ' + marksAnt['ant0'].length);
-	
-	
+		
 	//Si está logeado, cambiamos la configuración del usuario
 	if(firebase){
 		var user = firebase.auth().currentUser;
-		if (user != null && ant != '') {
+		
+		if (user !== null && ant !== '') {
 			uid = user.uid;  
 			//Cambiamos la configuración del usuario
+			console.log('Cambiando configuración del usuario');
 			firebase.database().ref('users/' + uid +'/marks_config/ant').set(ant);
 		}
 	}
-	
-	
 });
 
 
@@ -392,3 +418,16 @@ function SidebarCollapse () {
     // Collapse/Expand icon
     $('#collapse-icon').toggleClass('fa-angle-double-left fa-angle-double-right');
 }
+
+
+/*
+------------------
+FIREBASE
+https://www.firebase.com/docs/web/guide/
+-------------------
+*/
+$(document).ready( function() {
+	
+
+});
+

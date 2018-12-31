@@ -19,15 +19,27 @@ $data['cats'] = $map->getCats();
 //MARCAS
 //Si el usuario está logedo, obtenemos su configuración, si no mostramos la de por defecto
 $marks_config = array();
+$default = c::get('marks.config');
 
 if($user->logged){ 
 
 	$marks_config = $user->user_data['marks_config'];
 	
+	//Nos aseguramos de que contiene todos los valores necesarios
+	
+	foreach($default AS $key => $value)
+	{
+		if(!array_key_exists($key,$marks_config))
+		{
+			$marks_config[$key] = $default[$key];
+		}
+	}
+	//print_r($marks_config);
+	
 }
 else
 {
-	$marks_config = c::get('marks.config');
+	$marks_config = $default;
 }
 
 //Si se ha especificado el orden
@@ -45,6 +57,7 @@ $data['marks'] = $map->getMarks($marks_config,$search);
 
 //Añadimos las palabras clave
 $data['tags'] = $map->tags;
+
 
 header('Content-Type: application/json');
 echo json_encode($data, JSON_PRETTY_PRINT); //Muestra el archivo JSON formateado bonito

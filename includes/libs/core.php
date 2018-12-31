@@ -11,12 +11,11 @@
 
 //Clase que establece las variables y constantes del sitio
 //Inspirado en http://getkirby.com
+
 //Firebase
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 
-
-//$serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/' . c::get('fb.jsonFile'));
 
 class C {
 
@@ -186,8 +185,8 @@ class Users
 			$this->user_data = $this->getUserData($this->id);
 			$this->is_admin = ($this->user_data['admin'] == 1) ? true : false;
 			
-			
-		} 
+			 
+		}
 	}
 	
 	function __destruct(){
@@ -200,7 +199,12 @@ class Users
 		$db = $this->db;
 		$db->where ("id_user", $id);
 		$user = $db->getOne ("users");
-		
+		//Comprobamos que el archivo de configuración de Firebas existe
+		if(!is_file(__DIR__.'/../' . c::get('fb.jsonFile')))
+		{
+			//url::go('error.php?error=FirebaseFile');
+			die('Error al obtener los datos de conexión a la Base de Datos Firebase');
+		}
 		//Añadimos la configuración de marcas de firebase
 		$serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/../' . c::get('fb.jsonFile'));
 		$firebase = (new Factory)
@@ -224,6 +228,9 @@ class Users
 		{
 			$user['cats_notice'][] = $val['id_cat'];
 		}
+		
+		//Añadimos el Custom Token para poder autenticarse en Firebase
+		$user['custom_token'] = $firebase->getAuth()->createCustomToken($uid);
 		
 		//print_r($user);
 		
@@ -563,7 +570,13 @@ class Users
 	
 	public function generateFbToken()
 	{
-		$serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/' . c::get('fb.jsonFile'));
+		//$serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/' . c::get('fb.jsonFile'));
+	}
+	
+	public function destroyCookie()
+	{
+		$cookiename = c::get('cookie.user');
+		setcookie($cookiename, null, time() - 3600, "/");
 	}
 	
 	

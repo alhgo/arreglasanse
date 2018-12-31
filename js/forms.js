@@ -13,9 +13,10 @@ $('input').blur(function(){
   } else {
     $(this).addClass('filled');
   }
-})  
+});  
 
-window.onload = function() {
+
+$(document).ready( function() {
 	
 	/*** LOGIN ***/
 	$( "#login-button" ).click(function(event) {
@@ -620,5 +621,5 @@ window.onload = function() {
 		
 	});
 
-};
+});
 
