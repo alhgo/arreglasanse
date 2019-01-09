@@ -216,11 +216,40 @@ html, body, #map {
 
 /* SIDE BAR MARKS */
 
+/* Side bar scroll bar */
+ 
+	/* width */
+	#sidebar-container::-webkit-scrollbar {
+	  width: 10px;
+	}
+
+	/* Track */
+	#sidebar-container::-webkit-scrollbar-track {
+	  background: #f1f1f1; 
+	}
+
+	/* Handle */
+	#sidebar-container::-webkit-scrollbar-thumb {
+	  background: #888; 
+	}
+
+	/* Handle on hover */
+	#sidebar-container::-webkit-scrollbar-thumb:hover {
+	  background: #555; 
+	}
+
 #side_bar div {
 	background-color:  white;
 	
 }
 
+.side_title {
+	background-image: linear-gradient(#fff, #eee);
+	margin: 0px;
+	padding: 5px 0px;
+	border-bottom: 1px black solid;
+	border-top: 1px black solid;
+}
 
 #side_bar {
   padding: 0px !important;
@@ -266,3 +295,159 @@ html, body, #map {
 	cursor:  pointer;
 }
 
+
+/*MARK INFO BOX */
+
+.mark_info {
+	font-size: 1em;
+	box-sizing: border-box;
+}
+
+.mark_info h3 {
+	font-size: 1.4em;
+}
+
+/* IMG INFO WINDOW */
+
+.mark_info img {
+	width: 75px;
+	height: 75px;
+	margin: 5px 15px 10px 0px;
+	float: left;
+	border-radius: 8px;
+  	cursor: pointer;
+}
+
+img.hover-shadow {
+  transition: 0.3s;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+.mark_info .clear {
+	clear: both;
+}
+
+/* INFO FOOTER */
+.mark_info_footer {
+		font-size: 0.8em;
+	border-bottom: 1px black solid;
+}
+
+/* 
+Badges 
+http://jsfiddle.net/zxVhL/16/
+*/
+*.icon-blue {color: #0088cc}
+*.icon-grey {color: grey}
+
+.mark_info_footer i {
+    /*width:100px;*/
+    text-align:center;
+    vertical-align:middle;
+}
+
+.mark_info_footer .fa {
+    position: relative;
+	margin-right: 10px;
+}
+
+.mark_info_footer .badge {
+    font-size: .30em;
+    
+    display: block;
+    position: relative;
+    top: -4.35em;
+    right: -2.40em;
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+    border-radius: 50%;
+    text-align: center;
+    
+    color: #fff;
+    background: rgba(206,34,37,1.00);
+}
+
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+/* Modal Content (image) */
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
+
+/* Caption of Modal Image */
+#caption {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  color: #ccc;
+  padding: 10px 0;
+  height: 150px;
+}
+
+
+/* Add Animation */
+.modal-content, #caption {  
+  -webkit-animation-name: zoom;
+  -webkit-animation-duration: 0.6s;
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+  from {-webkit-transform:scale(0)} 
+  to {-webkit-transform:scale(1)}
+}
+
+@keyframes zoom {
+  from {transform:scale(0)} 
+  to {transform:scale(1)}
+}
+
+/* The Close Button */
+.closeModal {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.closeModal:hover,
+.closeModal:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+  .modal-content {
+    width: 100%;
+  }
+}

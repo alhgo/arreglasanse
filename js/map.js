@@ -126,15 +126,11 @@ function initMap() {
 	$.each( mapData.marks, function( key, val ) {
 		
 		//Caja de INFO
-		var contentString = '<div>'+
-            '<h3>' + val.tit + '</h3>'+
-            '<div>'+
-            '<p>' + val.descr + '</p>'+
-            '</div>';
+		var contentString = infoWindowContruct(val);
 
         var infowindow = new google.maps.InfoWindow({
           content: contentString,
-          maxWidth: 200
+          maxWidth: 300
         });
 		
 		
@@ -205,6 +201,57 @@ function initMap() {
 	}
 
 
+/*
+INFO WINDOW
+*/
+function infoWindowContruct(val)
+{
+	var string = '<div class="mark_info">'+
+            '<h3>' + val.tit + '</h3>' + 
+			'<p>';
+			if(val.image !== 'default.jpg') {
+				string += '<img src="images/marks/thumbs/' + val.image + '" id="thumb_' + val.id_mark + '" onClick="openModal(this)" alt="' + val.tit + '" class="hover-shadow">';
+			}
+            string += val.descr + '</p>'+
+			'<div class="clear"></div>' + 	
+            '<div class="mark_info_footer">Autor: ' + val.id_usr + 
+			' - <i class="fa fa-comments fa-2x icon-blue"><span class="badge">' + val.comments + '</span></i>' + 
+			' - <i class="fa fa-thumbs-up fa-2x icon-blue"><span class="badge">' + val.agree + '</span></i>' + 
+			'</div>' + 
+			'' +
+			'<div class="mark_comments"> Mostrar comentarios</div>' +
+            '</div>';
+	
+	return string;
+}
+
+//MODAL
+var modal = document.getElementById('markImageModal');
+
+function openModal(e) {
+	//console.log(e.id);
+	//Datos de la imagen
+	var modalImg = document.getElementById("img01");
+	var captionText = document.getElementById("caption");
+	
+	//Launch modal
+	modal.style.display = "block";
+  	var src = e.src;
+	src = src.replace('thumbs/', '');
+	modalImg.src = src;
+  	captionText.innerHTML = e.alt;
+
+
+}
+
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("closeModal")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() { 
+  modal.style.display = "none";
+};
 
 
 /*

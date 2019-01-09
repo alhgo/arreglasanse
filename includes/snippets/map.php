@@ -18,4 +18,13 @@
     
 </div><!-- body-row END -->
 
+<!-- The Image Modal -->
+<div id="markImageModal" class="modal">
+  <span class="closeModal">&times;</span>
+  <img class="modal-content" id="img01">
+  <div id="caption"></div>
+</div>
+
+
+
     

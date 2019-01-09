@@ -71,7 +71,7 @@ else
             </a>
 			
         </ul><!-- List Group END-->
-		<h4 class="text-center">Marcas</h4>
+		<h4 class="text-center side_title"><i class="fa fa-map-marker mr-3"></i></h4>
 		<!--SIDE BAR MARKS -->
 		<ul id="side_bar">
 			
